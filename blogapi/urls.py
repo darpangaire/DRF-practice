@@ -16,7 +16,11 @@ urlpatterns = [
   
   
   path('', views.login_page, name='login'),
-  path('protected/', views.protected_page, name='protected'),
+  # path('protected/', views.protected_page, name='protected'),
+  path('register/', views.register_Page, name='register'),
+  path('reset-email-pass/', views.reset_email_Password, name='resetEmailPassword'),
+  
+  path('reset-password/', views.password_reset, name='passwordReset'),
   
 ]
 

@@ -1,0 +1,50 @@
+{% extends 'includes/basic.html' %}
+{% block title %}Forgot Password{% endblock %}
+
+{% block content %}
+
+<div class="bg-light">
+  <div class="container mt-5">
+    <div class="card p-4 shadow-sm">
+      <h2 class="mb-4">Forgot Password</h2>
+      <form id="resetRequestForm">
+        <div class="mb-3">
+          <label for="email" class="form-label">Enter your email</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Reset Link</button>
+        <div id="message" class="mt-3"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('resetRequestForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+
+      try {
+        const response = await fetch('http://localhost:8000/api/reset-password/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: email })
+        });
+
+        const result = await response.json();
+        const msg = document.getElementById('message');
+
+        if (response.ok) {
+          msg.innerHTML = `<div class="alert alert-success">Reset link has been sent to your email.</div>`;
+        } else {
+          msg.innerHTML = `<div class="alert alert-danger">${Object.values(result).join('<br>')}</div>`;
+        }
+      } catch (error) {
+        document.getElementById('message').innerHTML = `<div class="alert alert-danger">Error: ${error}</div>`;
+      }
+    });
+  </script>
+</div>
+
+{% endblock %}

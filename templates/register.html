@@ -1,0 +1,83 @@
+{% extends 'includes/basic.html' %}
+{% block content %}
+
+<head>
+  {% block title %}Register{% endblock %}
+</head>
+
+<div class="bg-light">
+  <div class="container mt-5">
+    <div class="card p-4 shadow-sm">
+      <h2 class="mb-4">Register</h2>
+      <form id="registerForm" action="{% url 'login' %}">
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="tc" class="form-label">Terms & Conditions (true/false)</label>
+          <input type="text" class="form-control" id="tc" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" required>
+        </div>
+        <div class="mb-3">
+          <label for="password2" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="password2" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        <div id="message" class="mt-3"></div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const data = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      tc: document.getElementById('tc').value.toLowerCase() === 'true',
+      password: document.getElementById('password').value,
+      password2: document.getElementById('password2').value
+    };
+
+    try {
+      const response = await fetch('http://localhost:8000/api/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      const messageBox = document.getElementById('message');
+
+      if (response.ok) {
+        messageBox.innerHTML = '<div class="alert alert-success">Registration successful! Redirecting to login...</div>';
+        // Redirect after short delay
+        setTimeout(() => {
+          window.location.href = '/';  // Change this to your actual login page URL or route
+        }, 2000);
+      } else {
+        let errors = Object.values(result).join('<br>');
+        messageBox.innerHTML = `<div class="alert alert-danger">${errors}</div>`;
+      }
+    } catch (error) {
+      document.getElementById('message').innerHTML = `<div class="alert alert-danger">Error: ${error}</div>`;
+    }
+  });
+</script>
+
+</div>
+
+{% endblock %}
+

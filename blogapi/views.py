@@ -12,6 +12,7 @@ from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 
 
+
 # Create your views here.
 
 def get_tokens_for_user(user):
@@ -103,7 +104,12 @@ def register_Page(request):
   return render(request,"register.html")
 
 
-def protected_page(request):
-    return render(request, "protected.html")
 
       
+def reset_email_Password(request):
+  return render(request,'reset-email-pass.html')
+
+def password_reset(request):
+  return render(request,'password-reset.html')
+
+
